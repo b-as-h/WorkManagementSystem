@@ -286,9 +286,3 @@ cd server
 npm run init-db
 ```
 **注意：这会清空所有数据！**
-
----
-
-## 许可证
-
-MIT
