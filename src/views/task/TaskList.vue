@@ -54,16 +54,18 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200" fixed="right">
+      <el-table-column label="操作" width="240" fixed="right">
         <template #default="{ row }">
-          <el-button v-if="row.status !== 'completed'" size="small" type="success" @click="handleStatusChange(row, 'completed')">完成</el-button>
-          <el-button v-if="row.status === 'pending'" size="small" type="warning" @click="handleStatusChange(row, 'inProgress')">开始</el-button>
-          <el-button size="small" @click="handleEdit(row)">编辑</el-button>
-          <el-popconfirm title="确定删除该任务？" @confirm="handleDelete(row.id)">
-            <template #reference>
-              <el-button size="small" type="danger">删除</el-button>
-            </template>
-          </el-popconfirm>
+          <div class="action-buttons">
+            <el-button v-if="row.status !== 'completed'" size="small" type="success" @click="handleStatusChange(row, 'completed')">完成</el-button>
+            <el-button v-if="row.status === 'pending'" size="small" type="warning" @click="handleStatusChange(row, 'inProgress')">开始</el-button>
+            <el-button size="small" @click="handleEdit(row)">编辑</el-button>
+            <el-popconfirm title="确定删除该任务？" @confirm="handleDelete(row.id)">
+              <template #reference>
+                <el-button size="small" type="danger">删除</el-button>
+              </template>
+            </el-popconfirm>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -197,3 +199,16 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+/* 操作列按钮单行排列，避免换行错位 */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-buttons .el-button + .el-button {
+  margin-left: 0;
+}
+</style>
