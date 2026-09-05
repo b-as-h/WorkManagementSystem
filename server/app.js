@@ -14,6 +14,9 @@ const taskRoutes = require('./routes/tasks');
 const app = express();
 const PORT = 3001;
 
+// 不在响应头中暴露框架信息（X-Powered-By）
+app.disable('x-powered-by');
+
 // 中间件
 app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
