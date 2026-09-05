@@ -181,7 +181,8 @@ onMounted(async () => {
   try {
     await Promise.all([
       taskStore.fetchTasks(),
-      personnelStore.fetchPersonnel()
+      personnelStore.fetchPersonnel(),
+      personnelStore.fetchDepartmentTree()
     ])
   } catch (error) {
     ElMessage.error('加载数据失败')

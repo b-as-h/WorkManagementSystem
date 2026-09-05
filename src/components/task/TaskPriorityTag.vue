@@ -1,5 +1,5 @@
 <template>
-  <el-tag :type="priorityInfo.type" :effect="effect" size="size">
+  <el-tag :type="priorityInfo.type" :effect="effect" :size="size">
     {{ priorityInfo.label }}
   </el-tag>
 </template>

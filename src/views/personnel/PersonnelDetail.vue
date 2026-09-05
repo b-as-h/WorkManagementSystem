@@ -68,9 +68,10 @@ const personTasks = ref([])
 
 async function loadData() {
   loading.value = true
+  taskLoading.value = true
   try {
     // 获取人员详情
-    const [personResult] = await Promise.all([
+    await Promise.all([
       personnelStore.fetchPersonnel(),
       taskStore.fetchTasks({ assignee_id: route.params.id })
     ])
@@ -81,6 +82,7 @@ async function loadData() {
     ElMessage.error('加载数据失败')
   } finally {
     loading.value = false
+    taskLoading.value = false
   }
 }
 

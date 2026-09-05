@@ -5,11 +5,6 @@ export function getRoles() {
   return get('/roles');
 }
 
-// 获取单个角色
-export function getRole(id) {
-  return get(`/roles/${id}`);
-}
-
 // 创建角色
 export function createRole(data) {
   return post('/roles', data);
@@ -27,7 +22,6 @@ export function deleteRole(id) {
 
 export default {
   getRoles,
-  getRole,
   createRole,
   updateRole,
   deleteRole

@@ -10,11 +10,6 @@ export function getDepartmentTree() {
   return get('/departments/tree');
 }
 
-// 获取单个部门
-export function getDepartment(id) {
-  return get(`/departments/${id}`);
-}
-
 // 创建部门
 export function createDepartment(data) {
   return post('/departments', data);
@@ -33,7 +28,6 @@ export function deleteDepartment(id) {
 export default {
   getDepartments,
   getDepartmentTree,
-  getDepartment,
   createDepartment,
   updateDepartment,
   deleteDepartment

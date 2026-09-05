@@ -83,7 +83,6 @@
 <script setup>
 import { useTaskStore } from '@/stores/task'
 import { usePersonnelStore } from '@/stores/personnel'
-import { TASK_STATUS_MAP, TASK_PRIORITY_MAP } from '@/utils/constants'
 
 const taskStore = useTaskStore()
 const personnelStore = usePersonnelStore()

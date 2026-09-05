@@ -30,6 +30,7 @@ export const useAppStore = defineStore('app', () => {
   function logout() {
     currentUser.value = null
     localStorage.removeItem('wms_user')
+    localStorage.removeItem('wms_token')
   }
 
   return { sidebarCollapsed, currentUser, loading, toggleSidebar, login, logout }

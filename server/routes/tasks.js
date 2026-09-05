@@ -230,7 +230,13 @@ router.put('/:id', async (req, res) => {
     if (deadline !== undefined && deadline !== formatDate(oldTask.deadline)) changedFields.push('deadline');
 
     // 更新任务
-    const completedAt = (status === 'completed' && oldTask.status !== 'completed') ? new Date() : oldTask.completed_at;
+    // 新完成：记录完成时间；从已完成改回其他状态：清空完成时间；其余情况保留原值
+    let completedAt = oldTask.completed_at;
+    if (status === 'completed' && oldTask.status !== 'completed') {
+      completedAt = new Date();
+    } else if (status !== undefined && status !== 'completed' && oldTask.status === 'completed') {
+      completedAt = null;
+    }
 
     await pool.query(
       `UPDATE tasks SET

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../config/database');
-const { successResponse, errorResponse, generateId } = require('../utils/helpers');
+const { successResponse, errorResponse } = require('../utils/helpers');
 
 // GET /api/departments - 获取所有部门
 router.get('/', async (req, res) => {

@@ -1,7 +1,17 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 const { pool } = require('../config/database');
 const { successResponse, errorResponse, generateId } = require('../utils/helpers');
+const { generateToken } = require('../middleware/auth');
+
+// 校验密码：支持 bcrypt 哈希，兼容历史明文密码
+async function verifyPassword(inputPassword, storedPassword) {
+  if (storedPassword.startsWith('$2')) {
+    return bcrypt.compare(inputPassword, storedPassword);
+  }
+  return inputPassword === storedPassword;
+}
 
 // POST /api/auth/login - 用户登录
 router.post('/login', async (req, res) => {
@@ -23,8 +33,8 @@ router.post('/login', async (req, res) => {
 
     const user = users[0];
 
-    // 简单密码验证（实际项目中应使用bcrypt）
-    if (user.password !== password) {
+    const passwordValid = await verifyPassword(password, user.password);
+    if (!passwordValid) {
       return res.status(401).json(errorResponse('用户名或密码错误', 401));
     }
 
@@ -44,7 +54,8 @@ router.post('/login', async (req, res) => {
       avatar: '',
       role: roleName,
       personnelId: user.personnel_id,
-      departmentId: user.department_id
+      departmentId: user.department_id,
+      token: generateToken({ id: user.id, username: user.username })
     };
 
     res.json(successResponse(userData, '登录成功'));
@@ -70,9 +81,11 @@ router.post('/register', async (req, res) => {
     }
 
     const userId = generateId();
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     await pool.query(
       'INSERT INTO users (id, username, password, name) VALUES (?, ?, ?, ?)',
-      [userId, username, password, name]
+      [userId, username, hashedPassword, name]
     );
 
     const userData = {
@@ -80,7 +93,8 @@ router.post('/register', async (req, res) => {
       username,
       name,
       avatar: '',
-      role: '普通成员'
+      role: '普通成员',
+      token: generateToken({ id: userId, username })
     };
 
     res.status(201).json(successResponse(userData, '注册成功'));

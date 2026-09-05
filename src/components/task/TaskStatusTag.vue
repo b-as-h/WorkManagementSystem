@@ -1,5 +1,5 @@
 <template>
-  <el-tag :type="statusInfo.type" :effect="effect" size="size">
+  <el-tag :type="statusInfo.type" :effect="effect" :size="size">
     {{ statusInfo.label }}
   </el-tag>
 </template>

@@ -128,7 +128,8 @@ async function handleEdit() {
 onMounted(async () => {
   await Promise.all([
     loadTask(),
-    personnelStore.fetchPersonnel()
+    personnelStore.fetchPersonnel(),
+    personnelStore.fetchDepartmentTree()
   ])
 })
 </script>

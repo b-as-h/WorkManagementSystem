@@ -116,7 +116,7 @@ WorkManagementSystem/
    DB_PORT=3306
    DB_USER=root
    DB_PASSWORD=123456    # 修改为你的MySQL密码
-   DB_NAME=wms_db
+   DB_NAME=wms_db_other
    PORT=3001
    ```
 
@@ -131,7 +131,7 @@ WorkManagementSystem/
    ```
    ✅ 已连接到 MySQL 服务器
    ✅ 数据库初始化成功！
-      - 数据库 wms_db 已创建
+      - 数据库 wms_db_other 已创建
       - 所有表已创建
       - 默认数据已插入
 

@@ -236,7 +236,7 @@ export const usePersonnelStore = defineStore('personnel', () => {
 
   return {
     personnel, departments, departmentTree, roles, loading,
-    personnelById, personnelByDept, deptById, roleById,
+    personnelById,
     fetchPersonnel, fetchDepartments, fetchDepartmentTree, fetchRoles, fetchAllData,
     addPerson, updatePerson: updatePersonData, removePerson,
     addDepartment, updateDepartment: updateDepartmentData, removeDepartment,

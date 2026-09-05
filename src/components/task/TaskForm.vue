@@ -13,6 +13,17 @@
         <el-radio-button value="low">低</el-radio-button>
       </el-radio-group>
     </el-form-item>
+    <el-form-item label="所属部门">
+      <el-tree-select
+        v-model="form.departmentId"
+        :data="departmentList"
+        :props="{ label: 'name', value: 'id', children: 'children' }"
+        placeholder="请选择部门"
+        check-strictly
+        clearable
+        style="width: 100%;"
+      />
+    </el-form-item>
     <el-form-item label="指派给">
       <el-select v-model="form.assigneeId" placeholder="选择负责人" clearable filterable style="width: 100%;">
         <el-option
@@ -38,36 +49,45 @@
 <script setup>
 const props = defineProps({
   initialData: { type: Object, default: () => ({}) },
-  personnelList: { type: Array, default: () => [] }
+  personnelList: { type: Array, default: () => [] },
+  departmentList: { type: Array, default: () => [] }
 })
 
 const formRef = ref(null)
 
-const form = ref({
-  title: '',
-  description: '',
-  priority: 'medium',
-  assigneeId: null,
-  category: '',
-  deadline: null
-})
+function getDefaultForm() {
+  return {
+    title: '',
+    description: '',
+    priority: 'medium',
+    departmentId: null,
+    assigneeId: null,
+    category: '',
+    deadline: null
+  }
+}
+
+const form = ref(getDefaultForm())
 
 const rules = {
   title: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
   priority: [{ required: true, message: '请选择优先级', trigger: 'change' }],
 }
 
-// 监听初始数据变化
+// 监听初始数据变化：编辑时回填，新建（无 id）时重置为空白表单
 watch(() => props.initialData, (val) => {
   if (val && val.id) {
     form.value = {
       title: val.title || '',
       description: val.description || '',
       priority: val.priority || 'medium',
+      departmentId: val.department_id || val.departmentId || null,
       assigneeId: val.assignee_id || val.assigneeId || null,
       category: val.category || '',
       deadline: val.deadline || null
     }
+  } else {
+    form.value = getDefaultForm()
   }
 }, { immediate: true, deep: true })
 
@@ -80,6 +100,7 @@ function getData() {
     title: form.value.title,
     description: form.value.description,
     priority: form.value.priority,
+    departmentId: form.value.departmentId,
     assigneeId: form.value.assigneeId,
     category: form.value.category,
     deadline: form.value.deadline

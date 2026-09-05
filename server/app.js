@@ -33,12 +33,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// API 路由
+// API 路由（登录注册、健康检查无需鉴权，其余接口需要登录）
 app.use('/api/auth', authRoutes);
-app.use('/api/departments', departmentRoutes);
-app.use('/api/roles', roleRoutes);
-app.use('/api/personnel', personnelRoutes);
-app.use('/api/tasks', taskRoutes);
+app.use('/api/departments', authMiddleware, departmentRoutes);
+app.use('/api/roles', authMiddleware, roleRoutes);
+app.use('/api/personnel', authMiddleware, personnelRoutes);
+app.use('/api/tasks', authMiddleware, taskRoutes);
 
 // 健康检查
 app.get('/api/health', (req, res) => {

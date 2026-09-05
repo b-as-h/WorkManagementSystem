@@ -147,7 +147,6 @@ export const useTaskStore = defineStore('task', () => {
 
   return {
     tasks, loading, statistics, taskStats,
-    taskById, tasksByStatus, tasksByAssignee,
     fetchTasks, fetchStatistics, fetchTaskById,
     addTask, updateTask: updateTaskData, removeTask, changeTaskStatus
   }

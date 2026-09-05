@@ -1,8 +1,8 @@
 <template>
   <el-timeline>
     <el-timeline-item
-      v-for="item in timeline"
-      :key="item.timestamp"
+      v-for="(item, index) in timeline"
+      :key="index"
       :timestamp="formatDateTime(item.timestamp)"
       :type="getTimelineType(item.action)"
       placement="top"

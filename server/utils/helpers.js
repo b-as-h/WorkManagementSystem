@@ -5,18 +5,27 @@ function generateId() {
   return crypto.randomUUID();
 }
 
-// 格式化日期时间
+// 数字补零
+function pad(num) {
+  return String(num).padStart(2, '0');
+}
+
+// 格式化为本地日期时间 YYYY-MM-DD HH:mm:ss
+// 注意：不能使用 toISOString()，它输出 UTC 时间，在中国时区会早 8 小时
 function formatDateTime(date) {
   if (!date) return null;
   const d = new Date(date);
-  return d.toISOString().slice(0, 19).replace('T', ' ');
+  if (isNaN(d.getTime())) return null;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+    `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-// 格式化日期
+// 格式化为本地日期 YYYY-MM-DD
 function formatDate(date) {
   if (!date) return null;
   const d = new Date(date);
-  return d.toISOString().slice(0, 10);
+  if (isNaN(d.getTime())) return null;
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
 // 统一响应格式
@@ -36,19 +45,10 @@ function errorResponse(message = '操作失败', code = 400) {
   };
 }
 
-// 分页参数处理
-function getPagination(query) {
-  const page = Math.max(1, parseInt(query.page) || 1);
-  const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize) || 20));
-  const offset = (page - 1) * pageSize;
-  return { page, pageSize, offset };
-}
-
 module.exports = {
   generateId,
   formatDateTime,
   formatDate,
   successResponse,
-  errorResponse,
-  getPagination
+  errorResponse
 };

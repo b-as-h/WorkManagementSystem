@@ -1,9 +1,9 @@
 -- 工作管理系统数据库初始化脚本
 
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS wms_db DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS wms_db_other DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE wms_db;
+USE wms_db_other;
 
 -- 部门表
 DROP TABLE IF EXISTS `departments`;
@@ -128,6 +128,9 @@ INSERT INTO `role_permissions` (`role_id`, `permission`) VALUES
 ('role-member', 'task.view'),
 ('role-member', 'task.updateOwn');
 
--- 插入默认管理员用户 (密码: admin123)
+-- 插入默认管理员用户 (密码: admin123，bcrypt 哈希存储)
 INSERT INTO `users` (`id`, `username`, `password`, `name`) VALUES
-('user-admin', 'admin', 'admin123', '系统管理员');
+('user-admin', 'admin', '$2a$10$zu9qXeSqsU3VJMQAo7fFsO2gy/XA48UYdBK6K90eQBpyvFF/glRyi', '系统管理员');
+
+-- 重新开启外键检查
+SET FOREIGN_KEY_CHECKS = 1;

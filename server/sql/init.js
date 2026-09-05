@@ -26,7 +26,7 @@ async function initDatabase() {
     await connection.query(sql);
 
     console.log('✅ 数据库初始化成功！');
-    console.log('   - 数据库 wms_db 已创建');
+    console.log('   - 数据库 wms_db_other 已创建');
     console.log('   - 所有表已创建');
     console.log('   - 默认数据已插入');
     console.log('\n📋 默认管理员账号：');
@@ -34,6 +34,7 @@ async function initDatabase() {
     console.log('   密码: admin123');
 
   } catch (error) {
+    hasError = true;
     console.error('❌ 数据库初始化失败:', error.message);
 
     if (error.code === 'ECONNREFUSED') {
@@ -45,7 +46,7 @@ async function initDatabase() {
     if (connection) {
       await connection.end();
     }
-    process.exit(0);
+    process.exit(hasError ? 1 : 0);
   }
 }
 

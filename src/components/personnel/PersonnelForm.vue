@@ -47,22 +47,26 @@ const props = defineProps({
 
 const formRef = ref(null)
 
-const form = ref({
-  name: '',
-  departmentId: '',
-  position: '',
-  roleId: 'role-member',
-  phone: '',
-  email: '',
-  entryDate: null
-})
+function getDefaultForm() {
+  return {
+    name: '',
+    departmentId: '',
+    position: '',
+    roleId: 'role-member',
+    phone: '',
+    email: '',
+    entryDate: null
+  }
+}
+
+const form = ref(getDefaultForm())
 
 const rules = {
   name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
   departmentId: [{ required: true, message: '请选择部门', trigger: 'change' }],
 }
 
-// 监听初始数据变化
+// 监听初始数据变化：编辑时回填，新建（无 id）时重置为空白表单
 watch(() => props.initialData, (val) => {
   if (val && val.id) {
     form.value = {
@@ -74,6 +78,8 @@ watch(() => props.initialData, (val) => {
       email: val.email || '',
       entryDate: val.entry_date || val.entryDate || null
     }
+  } else {
+    form.value = getDefaultForm()
   }
 }, { immediate: true, deep: true })
 
