@@ -60,6 +60,8 @@ async function handleLogin() {
       ElMessage.error(result.message || '登录失败')
     }
   } catch (error) {
+    // store 已兜底业务错误（返回 success=false），此处仅捕获网络中断等未预期异常，记录日志便于排查
+    console.error('登录异常:', error)
     ElMessage.error('登录失败，请检查网络连接')
   } finally {
     loading.value = false

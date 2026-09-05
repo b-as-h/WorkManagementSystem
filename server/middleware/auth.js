@@ -22,7 +22,8 @@ function authMiddleware(req, res, next) {
   try {
     req.user = jwt.verify(token, JWT_SECRET);
     next();
-  } catch (error) {
+  } catch {
+    // token 无效或过期统一按 401 处理，无需区分具体异常类型
     return res.status(401).json(errorResponse('登录已过期，请重新登录', 401));
   }
 }
