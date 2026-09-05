@@ -128,6 +128,8 @@ async function handleStatusChange(task, newStatus) {
     const label = newStatus === 'completed' ? '已完成' : '进行中'
     ElMessage.success(`任务已标记为${label}`)
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('任务状态流转异常:', error)
     ElMessage.error('操作失败')
   }
 }
@@ -167,6 +169,8 @@ async function handleDelete(id) {
     await taskStore.removeTask(id)
     ElMessage.success('任务已删除')
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('删除任务异常:', error)
     ElMessage.error('删除失败')
   }
 }
@@ -185,6 +189,8 @@ onMounted(async () => {
       personnelStore.fetchDepartmentTree()
     ])
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('加载任务数据异常:', error)
     ElMessage.error('加载数据失败')
   } finally {
     loading.value = false

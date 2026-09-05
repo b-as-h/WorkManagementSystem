@@ -79,6 +79,8 @@ async function loadData() {
     person.value = personnelStore.personnelById(route.params.id)
     personTasks.value = taskStore.tasks.filter(t => t.assignee_id === route.params.id)
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('加载人员详情异常:', error)
     ElMessage.error('加载数据失败')
   } finally {
     loading.value = false

@@ -137,6 +137,8 @@ async function handleDelete(id) {
       ElMessage.warning(result.message)
     }
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('删除角色异常:', error)
     ElMessage.error('删除失败')
   }
 }
@@ -155,6 +157,8 @@ onMounted(async () => {
       personnelStore.fetchPersonnel()
     ])
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('加载角色数据异常:', error)
     ElMessage.error('加载数据失败')
   } finally {
     loading.value = false

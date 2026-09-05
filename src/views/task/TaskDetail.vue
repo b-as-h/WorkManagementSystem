@@ -90,6 +90,8 @@ async function loadTask() {
     const data = await taskStore.fetchTaskById(route.params.id)
     task.value = data
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('获取任务详情异常:', error)
     ElMessage.error('获取任务详情失败')
   } finally {
     loading.value = false
@@ -103,6 +105,8 @@ async function changeStatus(newStatus) {
     ElMessage.success(`任务已标记为${labels[newStatus]}`)
     await loadTask() // 刷新数据
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('任务状态流转异常:', error)
     ElMessage.error('操作失败')
   }
 }
@@ -119,6 +123,8 @@ async function handleEdit() {
     showEditDialog.value = false
     await loadTask() // 刷新数据
   } catch (error) {
+    // 网络层等未预期异常：记录日志便于排查，UI 提示固定文案
+    console.error('更新任务异常:', error)
     ElMessage.error('更新失败')
   } finally {
     submitting.value = false
