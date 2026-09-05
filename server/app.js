@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { testConnection } = require('./config/database');
+const { authMiddleware } = require('./middleware/auth');
 
 // 导入路由
 const authRoutes = require('./routes/auth');

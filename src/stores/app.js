@@ -17,6 +17,7 @@ export const useAppStore = defineStore('app', () => {
       if (result.code === 200) {
         currentUser.value = result.data
         localStorage.setItem('wms_user', JSON.stringify(result.data))
+        localStorage.setItem('wms_token', result.data.token)
         return { success: true, data: result.data }
       }
       return { success: false, message: result.message }

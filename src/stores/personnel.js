@@ -15,18 +15,6 @@ export const usePersonnelStore = defineStore('personnel', () => {
     return (id) => personnel.value.find(p => p.id === id)
   })
 
-  const personnelByDept = computed(() => {
-    return (deptId) => personnel.value.filter(p => p.department_id === deptId)
-  })
-
-  const deptById = computed(() => {
-    return (id) => departments.value.find(d => d.id === id)
-  })
-
-  const roleById = computed(() => {
-    return (id) => roles.value.find(r => r.id === id)
-  })
-
   // ---- 数据加载 ----
   async function fetchPersonnel(params = {}) {
     loading.value = true

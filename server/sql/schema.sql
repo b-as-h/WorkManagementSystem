@@ -5,6 +5,9 @@ CREATE DATABASE IF NOT EXISTS wms_db_other DEFAULT CHARACTER SET utf8mb4 COLLATE
 
 USE wms_db_other;
 
+-- 关闭外键检查，保证重复初始化时 DROP TABLE 不受外键约束影响
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- 部门表
 DROP TABLE IF EXISTS `departments`;
 CREATE TABLE `departments` (

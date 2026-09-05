@@ -5,6 +5,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 async function initDatabase() {
   let connection;
+  let hasError = false;
 
   try {
     // 先连接到MySQL（不指定数据库）

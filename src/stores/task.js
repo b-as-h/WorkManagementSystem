@@ -11,18 +11,6 @@ export const useTaskStore = defineStore('task', () => {
   })
 
   // 计算属性
-  const taskById = computed(() => {
-    return (id) => tasks.value.find(t => t.id === id)
-  })
-
-  const tasksByStatus = computed(() => {
-    return (status) => tasks.value.filter(t => t.status === status)
-  })
-
-  const tasksByAssignee = computed(() => {
-    return (personnelId) => tasks.value.filter(t => t.assignee_id === personnelId)
-  })
-
   const taskStats = computed(() => {
     return statistics.value
   })

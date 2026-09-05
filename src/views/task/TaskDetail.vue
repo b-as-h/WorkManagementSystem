@@ -50,7 +50,7 @@
 
     <!-- 编辑弹窗 -->
     <el-dialog title="编辑任务" v-model="showEditDialog" width="550px">
-      <TaskForm ref="taskFormRef" :initial-data="task || {}" :personnel-list="personnelList" />
+      <TaskForm ref="taskFormRef" :initial-data="task || {}" :personnel-list="personnelList" :department-list="personnelStore.departmentTree" />
       <template #footer>
         <el-button @click="showEditDialog = false">取消</el-button>
         <el-button type="primary" @click="handleEdit" :loading="submitting">确定</el-button>

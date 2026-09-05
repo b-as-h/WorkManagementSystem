@@ -1,7 +1,7 @@
 /**
  * 格式化日期为 YYYY-MM-DD（本地时区）
  */
-export function formatDate(dateStr) {
+function formatDate(dateStr) {
   if (!dateStr) return ''
   const d = new Date(dateStr)
   const y = d.getFullYear()

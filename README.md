@@ -1,6 +1,6 @@
 # 工作管理系统 (Work Management System)
 
-一个基于 Vue 3 + Express + MySQL 的全栈工作管理系统。
+一个基于 Vue 3 + Express + MySQL 的全栈工作管理系统，支持任务管理、人员管理、部门管理与角色权限管理。
 
 ---
 
@@ -18,16 +18,25 @@
 ### 后端
 | 技术 | 版本 | 用途 |
 |------|------|------|
-| Node.js | >= 16.x | 运行环境 |
+| Node.js | >= 20.19 | 运行环境 |
 | Express | ^4.18 | Web 框架 |
 | MySQL2 | ^3.9 | 数据库驱动 |
+| JWT (jsonwebtoken) | ^9.0 | 登录鉴权 |
+| bcryptjs | ^2.4 | 密码加密 |
 | Cors | ^2.8 | 跨域处理 |
 
 ---
 
 ## 功能概览
 
-### 任务管理子系统
+### 登录鉴权
+
+- 用户名密码登录，JWT Token 鉴权（有效期 7 天）
+- 密码使用 bcrypt 哈希存储
+- 未登录或登录过期自动跳转登录页
+- 支持用户注册接口（暂无注册页面）
+
+### 任务管理
 
 - **任务 CRUD**：创建、编辑、删除任务
 - **状态流转**：待处理 → 进行中 → 已完成（支持重新打开）
@@ -38,7 +47,7 @@
 - **操作时间线**：记录每次状态变更和编辑操作
 - **统计分析**：按状态、优先级、人员维度的可视化统计
 
-### 人员管理子系统
+### 人员管理
 
 - **人员档案**：姓名、职位、手机、邮箱、入职日期等
 - **部门管理**：支持多级部门树形结构，可增删改
@@ -66,33 +75,40 @@ WorkManagementSystem/
 ├── src/                                # 前端源码
 │   ├── main.js                         # 应用入口
 │   ├── App.vue                         # 根组件
-│   ├── router/                         # 路由配置
-│   ├── stores/                         # Pinia 状态管理
-│   ├── services/                       # API 服务层（新增）
-│   ├── components/                     # 通用组件
+│   ├── router/                         # 路由配置（含登录守卫）
+│   ├── stores/                         # Pinia 状态管理（app / task / personnel）
+│   ├── services/                       # API 服务层（fetch 封装）
+│   ├── components/                     # 组件
+│   │   ├── common/                     #   通用组件（侧边栏、面包屑等）
+│   │   ├── task/                       #   任务相关组件（表单、标签、时间线）
+│   │   └── personnel/                  #   人员相关组件
 │   ├── views/                          # 页面组件
+│   │   ├── task/                       #   任务列表 / 详情 / 统计
+│   │   └── personnel/                  #   人员列表 / 详情 / 部门 / 角色
 │   ├── layouts/                        # 布局组件
 │   ├── composables/                    # 组合式函数
-│   ├── utils/                          # 工具函数
+│   ├── utils/                          # 工具函数（常量、日期格式化）
 │   └── assets/                         # 静态资源
 │
-└── server/                             # 后端源码（新增）
+└── server/                             # 后端源码
     ├── app.js                          # Express 服务器入口
     ├── package.json                    # 后端依赖
-    ├── .env                            # 环境变量配置
+    ├── .env                            # 环境变量配置（需自行创建）
     ├── config/
-    │   └── database.js                 # 数据库连接配置
+    │   └── database.js                 # MySQL 连接池配置
+    ├── middleware/
+    │   └── auth.js                     # JWT 鉴权中间件
     ├── routes/
-    │   ├── auth.js                     # 认证接口
+    │   ├── auth.js                     # 认证接口（登录/注册）
     │   ├── tasks.js                    # 任务接口
     │   ├── personnel.js                # 人员接口
     │   ├── departments.js              # 部门接口
     │   └── roles.js                    # 角色接口
     ├── sql/
-    │   ├── schema.sql                  # 数据库表结构
+    │   ├── schema.sql                  # 数据库表结构与初始数据
     │   └── init.js                     # 数据库初始化脚本
     └── utils/
-        └── helpers.js                  # 工具函数
+        └── helpers.js                  # 工具函数（UUID、日期、响应格式）
 ```
 
 ---
@@ -101,26 +117,26 @@ WorkManagementSystem/
 
 ### 前置条件
 
-1. **Node.js** >= 16.x
+1. **Node.js** >= 20.19（Vite 8 要求）
 2. **MySQL** >= 5.7 或 8.x
 
-### 第一步：配置数据库
+### 第一步：初始化数据库
 
 1. 确保 MySQL 服务已启动
 
-2. 修改数据库配置（可选）：
+2. 在 `server/` 目录下创建 `.env` 文件（可选，不创建则使用默认值）：
 
-   编辑 `server/.env` 文件：
    ```env
    DB_HOST=localhost
    DB_PORT=3306
    DB_USER=root
-   DB_PASSWORD=123456    # 修改为你的MySQL密码
+   DB_PASSWORD=123456    # 修改为你的 MySQL 密码
    DB_NAME=wms_db_other
    PORT=3001
    ```
 
 3. 初始化数据库：
+
    ```bash
    cd server
    npm install
@@ -128,6 +144,7 @@ WorkManagementSystem/
    ```
 
    成功后会显示：
+
    ```
    ✅ 已连接到 MySQL 服务器
    ✅ 数据库初始化成功！
@@ -144,10 +161,11 @@ WorkManagementSystem/
 
 ```bash
 cd server
-npm run dev
+npm run dev        # 或 npm start
 ```
 
 成功后会显示：
+
 ```
 🚀 工作管理系统后端服务已启动
    地址: http://localhost:3001
@@ -194,18 +212,21 @@ npm run dev
 
 ## API 接口
 
+除登录、注册和健康检查外，所有接口均需在请求头携带 `Authorization: Bearer <token>`。
+
 ### 认证接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | POST | /api/auth/login | 用户登录 |
 | POST | /api/auth/register | 用户注册 |
+| GET | /api/health | 健康检查（无需鉴权） |
 
 ### 任务接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | GET | /api/tasks | 获取任务列表（支持筛选） |
 | GET | /api/tasks/statistics | 获取任务统计 |
-| GET | /api/tasks/:id | 获取任务详情 |
+| GET | /api/tasks/:id | 获取任务详情（含时间线） |
 | POST | /api/tasks | 创建任务 |
 | PUT | /api/tasks/:id | 更新任务 |
 | PUT | /api/tasks/:id/status | 更新任务状态 |
@@ -228,30 +249,32 @@ npm run dev
 | GET | /api/departments/:id | 获取部门详情 |
 | POST | /api/departments | 创建部门 |
 | PUT | /api/departments/:id | 更新部门 |
-| DELETE | /api/departments/:id | 删除部门 |
+| DELETE | /api/departments/:id | 删除部门（有子部门或人员时禁止） |
 
 ### 角色接口
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET | /api/roles | 获取角色列表 |
+| GET | /api/roles | 获取角色列表（含权限） |
 | GET | /api/roles/:id | 获取角色详情 |
 | POST | /api/roles | 创建角色 |
-| PUT | /api/roles/:id | 更新角色 |
-| DELETE | /api/roles/:id | 删除角色 |
+| PUT | /api/roles/:id | 更新角色（含权限） |
+| DELETE | /api/roles/:id | 删除角色（有人员使用时禁止） |
 
 ---
 
-## 数据库表结构
+## 数据库设计
+
+数据库名：`wms_db_other`（可在 `server/.env` 中修改）
 
 | 表名 | 说明 |
 |------|------|
-| `users` | 用户表（登录账号） |
+| `users` | 用户表（登录账号，可关联人员） |
 | `personnel` | 人员表 |
-| `departments` | 部门表（支持层级） |
+| `departments` | 部门表（支持层级，自关联） |
 | `roles` | 角色表 |
 | `role_permissions` | 角色权限关联表 |
 | `tasks` | 任务表 |
-| `task_timeline` | 任务时间线表 |
+| `task_timeline` | 任务时间线表（随任务级联删除） |
 
 ---
 
@@ -265,7 +288,7 @@ npm run dev
 | 部门经理 | 分配任务、查看任务、管理任务、查看人员 |
 | 普通成员 | 查看任务、更新自己的任务 |
 
-权限可在「角色权限」页面自定义扩展。
+权限标识可在「角色权限」页面自定义扩展。
 
 ---
 
@@ -274,16 +297,17 @@ npm run dev
 ### 1. 数据库连接失败
 - 检查 MySQL 服务是否启动
 - 检查 `server/.env` 中的数据库配置是否正确
-- 确认密码是否正确
+- 确认用户名密码是否正确
 
-### 2. 前端无法访问后端API
+### 2. 前端无法访问后端 API
 - 确保后端服务已启动（http://localhost:3001）
-- 检查浏览器控制台是否有跨域错误
+- 检查浏览器控制台是否有跨域错误（后端默认允许 `localhost:5173` 和 `localhost:3000`）
 
 ### 3. 如何重新初始化数据库
+
 ```bash
 cd server
 npm run init-db
 ```
+
 **注意：这会清空所有数据！**
-#龙龙是BASH JL子

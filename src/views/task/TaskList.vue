@@ -70,7 +70,7 @@
 
     <!-- 新建/编辑弹窗 -->
     <el-dialog :title="editingTask ? '编辑任务' : '新建任务'" v-model="showDialog" width="550px" @close="resetForm">
-      <TaskForm ref="taskFormRef" :initial-data="editingTask || {}" :personnel-list="personnelStore.personnel" />
+      <TaskForm ref="taskFormRef" :initial-data="editingTask || {}" :personnel-list="personnelStore.personnel" :department-list="personnelStore.departmentTree" />
       <template #footer>
         <el-button @click="showDialog = false">取消</el-button>
         <el-button type="primary" @click="handleSubmit" :loading="submitting">确定</el-button>

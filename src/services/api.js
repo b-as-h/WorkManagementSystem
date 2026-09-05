@@ -67,10 +67,3 @@ export function del(url) {
     method: 'DELETE'
   });
 }
-
-export default {
-  get,
-  post,
-  put,
-  del
-};

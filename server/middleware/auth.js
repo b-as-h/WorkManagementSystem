@@ -27,4 +27,4 @@ function authMiddleware(req, res, next) {
   }
 }
 
-module.exports = { authMiddleware, generateToken, JWT_SECRET };
+module.exports = { authMiddleware, generateToken };
