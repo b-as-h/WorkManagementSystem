@@ -102,6 +102,7 @@ function handleEdit(data) {
 }
 
 async function handleSubmit() {
+  // 校验不通过时 validate() 会 reject，属预期分支：忽略异常仅返回 false
   const valid = await formRef.value.validate().catch(() => false)
   if (!valid) return
 

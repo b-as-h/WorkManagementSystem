@@ -84,6 +84,7 @@ watch(() => props.initialData, (val) => {
 }, { immediate: true, deep: true })
 
 async function validate() {
+  // 校验不通过时 validate() 会 reject，属预期分支：忽略异常仅返回 false
   return formRef.value.validate().catch(() => false)
 }
 
