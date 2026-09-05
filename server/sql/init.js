@@ -1,7 +1,6 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 async function initDatabase() {
   let connection;
@@ -10,10 +9,10 @@ async function initDatabase() {
   try {
     // 先连接到MySQL（不指定数据库）
     connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      port: process.env.DB_PORT || 3306,
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '123456',
+      host: 'localhost',
+      port: 3306,
+      user: 'root',
+      password: '123456',
       multipleStatements: true
     });
 
@@ -41,7 +40,7 @@ async function initDatabase() {
     if (error.code === 'ECONNREFUSED') {
       console.error('\n💡 请确保 MySQL 服务已启动');
     } else if (error.code === 'ER_ACCESS_DENIED_ERROR') {
-      console.error('\n💡 请检查 .env 文件中的数据库用户名和密码');
+      console.error('\n💡 请检查 config/database.js 中的数据库用户名和密码');
     }
   } finally {
     if (connection) {

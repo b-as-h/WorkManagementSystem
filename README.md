@@ -93,7 +93,6 @@ WorkManagementSystem/
 └── server/                             # 后端源码
     ├── app.js                          # Express 服务器入口
     ├── package.json                    # 后端依赖
-    ├── .env                            # 环境变量配置（需自行创建）
     ├── config/
     │   └── database.js                 # MySQL 连接池配置
     ├── middleware/
@@ -124,18 +123,7 @@ WorkManagementSystem/
 
 1. 确保 MySQL 服务已启动
 
-2. 在 `server/` 目录下创建 `.env` 文件（可选，不创建则使用默认值）：
-
-   ```env
-   DB_HOST=localhost
-   DB_PORT=3306
-   DB_USER=root
-   DB_PASSWORD=123456    # 修改为你的 MySQL 密码
-   DB_NAME=wms_db_other
-   PORT=3001
-   ```
-
-3. 初始化数据库：
+2. 初始化数据库：
 
    ```bash
    cd server
@@ -264,7 +252,7 @@ npm run dev
 
 ## 数据库设计
 
-数据库名：`wms_db_other`（可在 `server/.env` 中修改）
+数据库名：`wms_db_other`（如需修改，编辑 `server/config/database.js`）
 
 | 表名 | 说明 |
 |------|------|
@@ -296,7 +284,7 @@ npm run dev
 
 ### 1. 数据库连接失败
 - 检查 MySQL 服务是否启动
-- 检查 `server/.env` 中的数据库配置是否正确
+- 检查 `server/config/database.js` 中的数据库配置是否正确
 - 确认用户名密码是否正确
 
 ### 2. 前端无法访问后端 API

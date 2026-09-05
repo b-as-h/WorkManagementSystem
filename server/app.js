@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { testConnection } = require('./config/database');
 const { authMiddleware } = require('./middleware/auth');
@@ -14,7 +12,7 @@ const personnelRoutes = require('./routes/personnel');
 const taskRoutes = require('./routes/tasks');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 
 // 中间件
 app.use(cors({
@@ -73,7 +71,7 @@ async function startServer() {
   if (!dbConnected) {
     console.error('\n❌ 无法连接到数据库，请检查配置：');
     console.error('   1. 确保 MySQL 服务已启动');
-    console.error('   2. 检查 server/.env 文件中的数据库配置');
+    console.error('   2. 检查 server/config/database.js 中的数据库配置');
     console.error('   3. 运行 npm run init-db 初始化数据库\n');
   }
 
